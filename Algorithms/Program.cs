@@ -13,11 +13,11 @@ namespace Algorithms
             int[] input = new int[] { 56, 32, 41, 66, 23, 1016, 41, 12 };
             Console.WriteLine("Input is: ' 56, 32, 41, 66, 23, 1016, 41, 12 '");
             Console.WriteLine("");
-            int[] output = QuickSort(input);
+            QuickSort(input);
             Console.Write("Output is: ");
-            for(int i = 0; i < output.Length; i++)
+            for(int i = 0; i < input.Length; i++)
             {
-                Console.Write(output[i].ToString() + ", ");
+                Console.Write(input[i].ToString() + ", ");
             }
             Console.ReadLine();
         }
@@ -61,50 +61,42 @@ namespace Algorithms
             }
             return input;
         }
-        
+
         public static int[] QuickSort(int[] input)
         {
-            List<int> list = input.ToList();
-
-            return QuickSort(list).ToArray();
+            return QuickSort(input, 0, input.Length - 1);
         }
 
-        public static List<int> QuickSort(List<int> right)
+        public static int[] QuickSort(int[] input, int leftIndex, int rightIndex)
         {
-            if(right.Count == 0) return right;
-
-            List<int> left = new List<int>();
-            int pivot = right.Last();
-            int pivotindex = right.Count - 1;
-
-            for(int i = 0; i < right.Count; i++)
+            if(leftIndex <= rightIndex)
             {
-                if(right[i] <= pivot)
-                {
-                    left.Add(right[i]);
+                int pivotIndex = Partition(input, leftIndex, rightIndex);
+                input = QuickSort(input, leftIndex, pivotIndex - 1);
+                input = QuickSort(input, pivotIndex + 1, rightIndex);
+            }
 
-                    right.RemoveAt(i);
+            return input;
+        }
 
-                    i--;
+        public static int Partition(int[] input, int leftIndex, int rightIndex)
+        {
+            int pivotValue = input[rightIndex];
+
+            int leftSwap = leftIndex - 1;
+            for(int rightSwap = leftIndex; rightSwap <= rightIndex; rightSwap++)
+            {
+                if(rightSwap <= pivotValue){
+                    leftSwap++;
+                    int temp = input[leftSwap];
+                    input[leftSwap] = input[rightSwap];
+                    input[rightSwap] = temp;
                 }
+
+                return rightSwap;
             }
 
-            if (left.Count > 1)
-            {
-                left = QuickSort(left);
-            }
-
-            if (right.Count > 1)
-            {
-                right = QuickSort(right);
-            }
-
-            foreach (int value in right)
-            {
-                left.Add(value);
-            }
-
-            return left;
+            return 0;
         }
     }
 }
