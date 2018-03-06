@@ -10,21 +10,22 @@ namespace Algorithms
         {
             Console.WriteLine("Hello World!");
             Console.WriteLine();
-            int[][] matrix = new int[][]
-            {
-                new int[] { 2,5,1,2,5,7,6,1,7,2},
-                new int[] { 2,5,1,2,5,7,5,7,2,2},
-                new int[] { 6,3,1,6,5,7,6,1,7,2},
-                new int[] { 2,5,1,2,5,4,3,1,7,2},
-                new int[] { 2,5,1,5,3,5,7,2,7,8},
-                new int[] { 5,4,1,2,5,7,6,1,5,1},
-                new int[] { 2,5,1,2,5,7,6,1,7,2},
-                new int[] { 2,5,10,9,2,6,8,1,7,2},
-                new int[] { 2,5,1,2,5,6,8,1,2,2},
-                new int[] { 3,1,1,7,3,4,6,7,8,3}
+            int[] radixarray = new int[]{
+                123,1323,513,123,753,135,7312,53,1,63,64,24,74,134,134,6432,134,672,724,341,63,35,5,6,31
             };
-            int highest = MatrixThing(matrix,3);
-            Console.WriteLine($"Highest is {highest}.");
+            for (int i = 0; i < radixarray.Length; i++)
+            {
+                if (i > 0) Console.Write(", ");
+                Console.Write(radixarray[i]);
+            }
+            Console.WriteLine();
+            RadixSort(radixarray,4);
+            for (int i = 0; i < radixarray.Length; i++)
+            {
+                if (i > 0) Console.Write(", ");
+                Console.Write(radixarray[i]);
+            }
+            Console.WriteLine();
             Console.ReadLine();
         }
 
@@ -233,11 +234,9 @@ namespace Algorithms
             }
         }
 
-        public static void RadixSort(int[] input)
+        public static void RadixSort(int[] input,int digits)
         {
-            Queue<int> All = new Queue<int>();
-
-            List<Queue<int>> Queues = new List<Queue<int>>(){
+            Queue<int>[] sortbox = new Queue<int>[]{
                 new Queue<int>(),
                 new Queue<int>(),
                 new Queue<int>(),
@@ -250,52 +249,41 @@ namespace Algorithms
                 new Queue<int>()
             };
 
-            int m = 10;
-            int n = 1;
-            int maxdigits = 1;
-
-            for (int i = 0; i < input.Length; i++)
+            Queue<int> sortlist = new Queue<int>();
+            foreach (int val in input)
             {
-                int val = input[i];
-
-                int digits = val.ToString().Count();
-
-                if (digits > maxdigits) maxdigits = digits;
+                sortlist.Enqueue(val);
             }
 
-            for (int i = 0; i < maxdigits; i++)
+            bool done = false;
+            int m = 10;
+            int n = 1;
+
+            for (int j = 1; j <= digits; j++)
             {
-                Console.WriteLine($"Digit {i + 1}");
-                for (int j = 0; j < input.Length; j++)
+
+                while( sortlist.Count > 0)
                 {
-                    int val = input[j];
-
-                    int sortinto = val % m / n;
-
-                    Console.WriteLine($"Sorting {val} into Queues[{sortinto}].");
-                    Queues[sortinto].Enqueue(val);
+                    int val = sortlist.Dequeue();
+                    int column = val % m / n;
+                    sortbox[column].Enqueue(val);
                 }
 
-                for(int j = 0; j < Queues.Count; j++)
+                for (int i = 0; i < sortbox.Length; i++)
                 {
-                    Console.WriteLine($"Queues[{j}] has {Queues[j].Count} values");
-                    while (Queues[j].Count > 0)
+                    while(sortbox[i].Count > 0)
                     {
-                        Console.WriteLine($"Moving value from Queues[{j}] to 'All'");
-                        All.Enqueue(Queues[j].Dequeue());
+                        sortlist.Enqueue(sortbox[i].Dequeue());
                     }
                 }
 
-                n = n * 10;
                 m = m * 10;
+                n = n * 10;
+            }
 
-                input = All.ToArray();
-
-                Console.WriteLine();
-                Console.WriteLine(All.Count);
-                Console.WriteLine();
-
-                All = new Queue<int>();
+            for (int i = 0; i < input.Length; i++)
+            {
+                input[i] = sortlist.Dequeue();
             }
 
         }
