@@ -301,11 +301,13 @@ namespace Algorithms
             {
                 if( x > 1)
                 {
+                    // if (x - 1, y) is bad, don't
                     xpaths = CountPaths(x - 1, y);
                 }
                 
                 if( y > 1)
                 {
+                    // if (x, y - 1) is bad, don't
                     ypaths = CountPaths(x, y - 1);
                 }
 
