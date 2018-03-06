@@ -10,7 +10,21 @@ namespace Algorithms
         {
             Console.WriteLine("Hello World!");
             Console.WriteLine();
-            Console.WriteLine(CountPaths(5, 6));
+            int[][] matrix = new int[][]
+            {
+                new int[] { 2,5,1,2,5,7,6,1,7,2},
+                new int[] { 2,5,1,2,5,7,5,7,2,2},
+                new int[] { 6,3,1,6,5,7,6,1,7,2},
+                new int[] { 2,5,1,2,5,4,3,1,7,2},
+                new int[] { 2,5,1,5,3,5,7,2,7,8},
+                new int[] { 5,4,1,2,5,7,6,1,5,1},
+                new int[] { 2,5,1,2,5,7,6,1,7,2},
+                new int[] { 2,5,10,9,2,6,8,1,7,2},
+                new int[] { 2,5,1,2,5,6,8,1,2,2},
+                new int[] { 3,1,1,7,3,4,6,7,8,3}
+            };
+            int highest = MatrixThing(matrix,3);
+            Console.WriteLine($"Highest is {highest}.");
             Console.ReadLine();
         }
 
@@ -286,8 +300,6 @@ namespace Algorithms
 
         }
 
-
-
         public static int CountPaths(int x, int y)
         {
             int xpaths = 0;
@@ -301,16 +313,73 @@ namespace Algorithms
             {
                 if( x > 1)
                 {
+                    // if (x - 1, y) is bad, don't
                     xpaths = CountPaths(x - 1, y);
                 }
                 
                 if( y > 1)
                 {
+                    // if (x, y - 1) is bad, don't
                     ypaths = CountPaths(x, y - 1);
                 }
 
                 return xpaths + ypaths;
             }
+        }
+
+        public static int MatrixThing(int[][] input,int range)
+        {
+            int highest = 0;
+            int[] product = new int[4];
+            for (int i = 0; i < input.Length; i++)
+			{
+                for (int j = 0; j < input[i].Length; j++)
+                {
+                    product[0] = input[i][j];
+                    for (int k = j + 1; k < j + range; k++)
+                    {
+                        if(k < input[i].Length)
+                            product[0] = product[0] * input[i][k];
+                    }
+
+                    product[1] = input[i][j];
+                    for (int k = j+1; k < j+range; k++)
+                    {
+                        for (int l = i+1; l < i+range; l++)
+                        {
+                            if(l < input.Length && k < input[l].Length)
+                                product[1] = product[1] * input[l][k];
+                        }
+                    }
+
+                    product[2] = input[i][j];
+                    for (int k = i + 1; k < i + range; k++)
+                    {
+                        if(k < input[i].Length)
+                            product[2] = product[2] * input[i][k];
+                    }
+
+                    product[3] = input[i][j];
+                    for (int k = j - 1; k > j - range; k--)
+                    {
+                        for (int l = i + 1; l < i + range; l++)
+                        {
+                            if(k >= 0 && l < input.Length)
+                                product[3] = product[3] * input[l][k];
+                        }
+                    }
+
+                    for (int x = 0; x < 4; x++)
+                    {
+                        if(product[x] > highest)
+                        {
+                            highest = product[x];
+                        }
+                    }
+                }
+			}
+
+            return highest;
         }
     }
 }
