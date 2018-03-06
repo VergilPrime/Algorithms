@@ -10,15 +10,7 @@ namespace Algorithms
         {
             Console.WriteLine("Hello World!");
             Console.WriteLine();
-            int[] input = new int[] { 56, 32, 41, 66, 23, 1016, 41, 12 };
-            Console.WriteLine("Input is: ' 56, 32, 41, 66, 23, 1016, 41, 12 '");
-            Console.WriteLine("");
-            MergeSort(input);
-            Console.Write("Output is: ");
-            for (int i = 0; i < input.Length; i++)
-            {
-                Console.Write(input[i].ToString() + ", ");
-            }
+            Console.WriteLine(CountPaths(5, 6));
             Console.ReadLine();
         }
 
@@ -225,7 +217,100 @@ namespace Algorithms
                     input[1] = temp;
                 }
             }
+        }
 
+        public static void RadixSort(int[] input)
+        {
+            Queue<int> All = new Queue<int>();
+
+            List<Queue<int>> Queues = new List<Queue<int>>(){
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>(),
+                new Queue<int>()
+            };
+
+            int m = 10;
+            int n = 1;
+            int maxdigits = 1;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                int val = input[i];
+
+                int digits = val.ToString().Count();
+
+                if (digits > maxdigits) maxdigits = digits;
+            }
+
+            for (int i = 0; i < maxdigits; i++)
+            {
+                Console.WriteLine($"Digit {i + 1}");
+                for (int j = 0; j < input.Length; j++)
+                {
+                    int val = input[j];
+
+                    int sortinto = val % m / n;
+
+                    Console.WriteLine($"Sorting {val} into Queues[{sortinto}].");
+                    Queues[sortinto].Enqueue(val);
+                }
+
+                for(int j = 0; j < Queues.Count; j++)
+                {
+                    Console.WriteLine($"Queues[{j}] has {Queues[j].Count} values");
+                    while (Queues[j].Count > 0)
+                    {
+                        Console.WriteLine($"Moving value from Queues[{j}] to 'All'");
+                        All.Enqueue(Queues[j].Dequeue());
+                    }
+                }
+
+                n = n * 10;
+                m = m * 10;
+
+                input = All.ToArray();
+
+                Console.WriteLine();
+                Console.WriteLine(All.Count);
+                Console.WriteLine();
+
+                All = new Queue<int>();
+            }
+
+        }
+
+
+
+        public static int CountPaths(int x, int y)
+        {
+            int xpaths = 0;
+            int ypaths = 0;
+            if(x == 1 && y == 1)
+            {
+                return 1;
+
+            }
+            else
+            {
+                if( x > 1)
+                {
+                    xpaths = CountPaths(x - 1, y);
+                }
+                
+                if( y > 1)
+                {
+                    ypaths = CountPaths(x, y - 1);
+                }
+
+                return xpaths + ypaths;
+            }
         }
     }
 }
