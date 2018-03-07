@@ -21,7 +21,7 @@ namespace Radix
                 Console.Write(radixarray[i]);
             }
             Console.WriteLine();
-            RadixSort(radixarray, 4);
+            RadixSort(radixarray);
             for (int i = 0; i < radixarray.Length; i++)
             {
                 if (i > 0) Console.Write(", ");
@@ -30,7 +30,7 @@ namespace Radix
             Console.WriteLine();
             Console.ReadLine();
         }
-        public static void RadixSort(int[] input, int digits)
+        public static void RadixSort(int[] input)
         {
             int max = Int32.MinValue;
 
@@ -52,41 +52,32 @@ namespace Radix
                 new Queue<int>()
             };
 
-            Queue<int> sortlist = new Queue<int>();
-            foreach (int val in input)
-            {
-                sortlist.Enqueue(val);
-            }
-
-            bool done = false;
             int m = 10;
             int n = 1;
 
             while(max / n > 0)
             {
 
-                while (sortlist.Count > 0)
+                for (int i = 0; i < input.Length; i++)
                 {
-                    int val = sortlist.Dequeue();
+                    int val = input[i];
                     int column = val % m / n;
                     sortbox[column].Enqueue(val);
                 }
+
+                int slot = 0;
 
                 for (int i = 0; i < sortbox.Length; i++)
                 {
                     while (sortbox[i].Count > 0)
                     {
-                        sortlist.Enqueue(sortbox[i].Dequeue());
+                        input[slot] = sortbox[i].Dequeue();
+                        slot++;
                     }
                 }
 
                 m *= 10;
                 n *= 10;
-            }
-
-            for (int i = 0; i < input.Length; i++)
-            {
-                input[i] = sortlist.Dequeue();
             }
 
         }
