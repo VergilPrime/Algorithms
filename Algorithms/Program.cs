@@ -8,24 +8,14 @@ namespace Algorithms
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.WriteLine();
-            int[] radixarray = new int[]{
-                123,1323,513,123,753,135,7312,53,1,63,64,24,74,134,134,6432,134,672,724,341,63,35,5,6,31
-            };
-            for (int i = 0; i < radixarray.Length; i++)
-            {
-                if (i > 0) Console.Write(", ");
-                Console.Write(radixarray[i]);
-            }
-            Console.WriteLine();
-            RadixSort(radixarray,4);
-            for (int i = 0; i < radixarray.Length; i++)
-            {
-                if (i > 0) Console.Write(", ");
-                Console.Write(radixarray[i]);
-            }
-            Console.WriteLine();
+            HashTable table = new HashTable();
+            table.Set("CodeFellows", 100);
+            table.Set("Dustin", 110);
+            table.Set("AmberKitty", 120);
+            table.Set("AmberKitty", 140);
+            table.Clear("CodeFellows");
+            Console.WriteLine(table.Get("AmberKitty"));
+            Console.WriteLine(table.Find(110));
             Console.ReadLine();
         }
 
